@@ -1,0 +1,51 @@
+#include<bits/stdc++.h>
+
+using namespace std;
+
+void print(vector<vector<int>>&arr){
+	int n = arr.size();
+	for(int i = 0; i < n; i++){
+		for(int j = 0; j < n; j++){
+			cout<<arr[i][j]<<" ";
+		}
+		cout<<endl;
+	}
+	cout<<endl;
+}
+
+void branch_and_bound(vector<vector<int>>&arr , vector<int> zig , vector<int> cols , vector<int> zag , int row ,int n){
+	if(row == n){
+		print(arr);cout<<endl;
+		return;
+	}
+	for(int i = 0; i < n; i++){
+		int x = row + i , y = row-i+n-1;
+		if(cols[i] == 0 and zig[x]==0 && zag[y] == 0){
+			cols[i] = 1;
+			zig[x] = 1;
+			zag[y] = 1;
+			arr[row][i] = 1;
+			branch_and_bound(arr , zig , cols , zag , row+1 , n);
+			cols[i] = 0;
+			zig[x] = 0;
+			zag[y] = 0;
+			arr[row][i] = 0;
+		}
+	}
+}
+
+void backtracking(){
+	
+}
+
+int main(){
+	#ifndef ONLINE_JUDGE
+		freopen("input.txt" , "r", stdin);
+		freopen("output.txt", "w", stdout);
+	#endif
+	int n ;
+	cin >> n;
+	vector<vector<int>> arr(n , vector<int>(n , 0));
+	vector<int> zig(n+1 , 0) , zag(n+1 , 0) , cols(n+1 , 0);
+	branch_and_bound(arr , zig ,cols, zag , 0 ,n);
+}

@@ -1,0 +1,92 @@
+class Solution {
+public:
+    
+    // isSafe function will help us check the valid moves by the queen within the boundary and also to check if any other Queen is present at the attacking postion or not 
+    // We will only check for the directions on the left hand side of the queen i.e Top Left, Bottom Left, and Left because we only have left side of the board filled once the recursion call is made 
+    bool isSafe(int row, int col, vector<string> board, int n)
+    {
+        int duprow = row;
+        int dupcol = col; 
+        
+        // Top Left check 
+        while(row>=0 && col>=0)
+        {
+            if(board[row][col] == 'Q')
+            {
+                return false;
+            }
+            row --;
+            col --;
+        }
+        
+        // Keeping the original value of col and row intact 
+        col = dupcol; 
+        row = duprow; 
+        
+        // Left Check 
+        while(col>=0)
+        {
+            if(board[row][col] == 'Q')
+            {
+                return false;
+            }
+            col--;
+        }
+        
+        col = dupcol; 
+        row = duprow;
+        
+        // Bottom Left check 
+        while(row<n && col>=0)
+        {
+            if(board[row][col]=='Q')
+            {
+                return false;
+            }
+            row++;
+            col--;
+        }
+        
+        return true;
+    }
+    
+    
+    // Solve function helps in the recursion part, it places Queens one by one in each row and then uses `isSafe` to check for valid postion 
+    // It checks each column, if it is possible to place the Queen, then it is placed or else with the help of backtracking we restore that place with '.'
+    // Incase the column equals to n, that means we have found the perfect placements of Queens on the board, according to the given conditions 
+    void solve(int col, vector<string> & board, vector<vector<string>> &ans, int n)
+    {
+        if(col == n)
+        {
+            ans.push_back(board);
+            return;
+        }
+        
+        else
+        {
+            for(int row=0; row<n; row++)
+            {
+                if(isSafe(row,col,board,n))
+                {
+                    board[row][col] = 'Q';
+                    solve(col+1,board,ans,n);
+                    board[row][col] = '.';
+                }
+            }
+        }
+    }
+    
+    
+    vector<vector<string>> solveNQueens(int n) 
+    {
+        vector<vector<string>> ans;
+        vector<string> board(n);
+        string s(n, '.');
+        for(int i=0; i<n; i++)
+        {
+            board[i] = s; 
+        }
+        solve(0,board,ans,n);
+        return ans;
+    }
+};

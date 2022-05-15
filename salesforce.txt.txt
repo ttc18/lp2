@@ -1,0 +1,27 @@
+public class Email {
+    public void sendMail(String [] addresses , String [] messages , String [] subjects ){
+        Messaging.SingleEmailMessage [] emails = new Messaging.SingleEmailMessage[]{};
+        Integer totalmails = addresses.size();
+        for(Integer i = 0; i < totalmails; i++){
+            Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();
+            email.setToAddresses(new List<String> {addresses[i]});
+            email.setPlainTextBody(messages[i]);
+            email.setSubject(subjects[i]);
+            emails.add(email);
+        }
+        Messaging.sendEmail(emails);
+    }
+}
+
+
+String address = 'tanveshchavan2000@gmail.com';
+String message = 'Hello there from Tanvesh !';
+String subject = 'Important matter';
+String [] addresses = new String []{},
+       messages = new String[]{},
+       subjects = new String[]{};
+addresses.add(address);
+messages.add(message);
+subjects.add(subject);
+Email em = new Email();
+em.sendMail(addresses , messages , subjects);
